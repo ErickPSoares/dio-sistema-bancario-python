@@ -39,7 +39,7 @@ while (True):
     elif operacao == "2":
         while (True):
             saque = int(input("Informe o valor que deseja sacar: "))
-            if limite_diario > LIMITE_DIARIO:
+            if limite_diario >= LIMITE_DIARIO:
                 print ("Você excedeu o limite diário de 3 saques!")
                 break
             elif saque > 500:

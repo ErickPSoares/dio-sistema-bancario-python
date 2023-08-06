@@ -3,8 +3,11 @@ limite_diario = 0
 saldo = 0
 historico_depositos = []
 historico_saques = []
+usuarios = {}
+contas = {}
+id = 1
 
-def extrato(saldo, /, *, historico_depositos,historico_saques):
+def extrato(saldo, /, *, historico_depositos, historico_saques):
     print(f"""
     ========= BANCO DO DEV =========
     *********    EXTRATO   *********
@@ -53,6 +56,33 @@ def deposito(saldo):
     historico_depositos.append(deposito)
     return saldo
 
+def cadastro_cliente(usuarios_funcao = usuarios):
+    usuarios_funcao = usuarios_funcao
+    while (True):
+        cpf = input("Informe o CPF, somente com números: ")
+        while (cpf in usuarios_funcao):
+            print("CPF já registrado!")
+            cpf = input("Informe o CPF, somente com números: ")
+        nome = input("Informe o nome: ")
+        data_nascimento = input("Informe a data de nascimento em formato dia-mês-ano: ")
+        endereco = input("Informe o endereço em formato logradouro,número-bairro-cidade/sigla de estado: ")
+        print("Cadastro de cliente criado com sucesso!")
+        return cpf,nome,data_nascimento,endereco
+
+def cadastro_conta(usuarios_funcao = usuarios, contas_funcao = contas, id_funcao = id):
+    usuarios_funcao = usuarios_funcao
+    contas_funcao = contas_funcao
+    id_funcao = id_funcao
+    while (True):
+        cpf = input("Informe o CPF do titular da nova conta, somente com números: ")
+        while (cpf not in usuarios_funcao):
+            print("CPF não encontrado!")
+            cpf = input("Informe o CPF, somente com números: ")
+        conta = "0001" + str(id_funcao)
+        print(f"Conta {conta} criada com sucesso!")
+        id_funcao += 1
+        return cpf, conta, id_funcao
+
 while (True):
 
     print(""" 
@@ -61,7 +91,9 @@ while (True):
     [1] Extrato 
     [2] Saque
     [3] Depósito
-    [4] Finalizar
+    [4] Cadastrar cliente
+    [5] Cadastrar conta
+    [6] Finalizar
     """)
     operacao = input("Sua opção: ")
 
@@ -72,5 +104,11 @@ while (True):
     elif operacao == "3":
         saldo = deposito(saldo)
     elif operacao == "4":
+        cpf, nome, data_nascimento, endereco = cadastro_cliente()
+        usuarios.setdefault(cpf,[nome, data_nascimento, endereco])
+    elif operacao == "5":
+        cpf, conta, id = cadastro_conta()
+        contas.setdefault(cpf,[conta])
+    elif operacao == "6":
         print("Finalizado com sucesso!")
         break
